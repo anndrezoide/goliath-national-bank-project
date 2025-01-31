@@ -10,8 +10,24 @@ permissions:
   pull-requests: write
 
 jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Passo 2: Executar testes (exemplo com Maven)
+      - name: Run Tests
+        run: |
+          mvn clean install
+          mvn test
+
   create-pr-to-homolog:
     runs-on: ubuntu-latest
+    needs: run-tests  # Só executa após os testes passarem
+    if: success()  # Só executa se os testes passarem
 
     steps:
       # Passo 1: Checkout do código
