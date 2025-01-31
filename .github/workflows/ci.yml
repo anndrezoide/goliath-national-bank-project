@@ -1,1 +1,50 @@
+name: CI/CD Pipeline
 
+on:
+  push:
+    branches:
+      - dev  # A ação será disparada quando houver push na branch dev
+
+jobs:
+  create-pr-and-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Passo 2: Configurar o Git
+      - name: Set up Git
+        run: |
+          git config --global user.name "André Gomes"
+          git config --global user.email "dhegomeez@gmail.com"
+
+      # Passo 3: Criar o Pull Request da branch dev para homolog
+      - name: Create Pull Request to Homolog
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: homolog  # A branch alvo do PR
+          head: dev      # A branch de origem do PR
+          title: "Pull Request de Dev para Homolog"
+          body: "Esse PR faz merge da branch dev para homolog para revisão e testes."
+
+      # Passo 4: Validar o código no Pull Request (exemplo usando testes)
+      - name: Run Tests on Pull Request
+        run: |
+          # Execute seus testes aqui, exemplo com Maven
+          mvn clean install
+          mvn test
+
+      # Passo 5: Verificar se o código foi homologado e se os testes passaram
+      - name: Verify Success and Merge to Main
+        if: success()  # Só faz o merge se os passos anteriores foram bem-sucedidos
+        run: |
+          # Agora que está tudo certo, podemos fazer o merge da branch homolog para main
+          git checkout homolog
+          git pull origin homolog
+          git checkout main
+          git pull origin main
+          git merge homolog
+          git push origin main
