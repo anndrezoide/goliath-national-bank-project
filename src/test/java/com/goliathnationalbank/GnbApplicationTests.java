@@ -9,7 +9,7 @@ class GnbApplicationTests {
 	@Test
 	void contextLoads() {
 		// Teste simples para garantir que o contexto carregue sem erros
-        System.out.println("Contexto carregado correto! - Novo 2");
+        System.out.println("Contexto carregado correto! - Novo 5");
 	}
 
 }
