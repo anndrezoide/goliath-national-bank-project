@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - develop
+      - develop  # Agora a pipeline será acionada apenas para a branch "develop"
 
 permissions:
   contents: write
@@ -24,15 +24,15 @@ jobs:
           git config --global user.name "André Gomes"
           git config --global user.email "dhegomeez@gmail.com"
 
-      # Passo 3: Criar o Pull Request da branch dev/develop para homolog
+      # Passo 3: Criar o Pull Request da branch develop para homolog
       - name: Create Pull Request to Homolog
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: homolog
-          head: develop  # Ajuste para "dev" ou "develop" conforme necessário
-          title: "Pull Request de Dev para Homolog"
-          body: "Esse PR faz merge da branch dev para homolog para revisão e testes."
+          base: homolog  # A branch alvo do PR
+          head: develop  # A branch de origem do PR
+          title: "Pull Request de Develop para Homolog"
+          body: "Esse PR faz merge da branch develop para homolog para revisão e testes."
 
       # Passo 4: Validar o código no Pull Request (exemplo usando testes)
       - name: Run Tests on Pull Request
