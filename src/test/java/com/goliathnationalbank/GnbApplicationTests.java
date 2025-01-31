@@ -8,6 +8,8 @@ class GnbApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Teste simples para garantir que o contexto carregue sem erros
+        System.out.println("Contexto carregado corretamente.");
 	}
 
 }
