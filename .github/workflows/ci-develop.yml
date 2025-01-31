@@ -72,3 +72,8 @@ jobs:
           title: "PR: Merge develop into homolog"
           body: "Este PR foi criado automaticamente para merge de develop em homolog."
           draft: false
+
+      - name: Wait for PR Approval
+        run: |
+          echo "Aguardando aprovação manual do PR de develop para homolog."
+          echo "Por favor, revise e aprove o PR na aba 'Pull Requests' do GitHub."
