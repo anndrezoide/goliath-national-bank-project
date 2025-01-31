@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - develop  # Agora a pipeline será acionada apenas para a branch "develop"
+      - develop  # A pipeline será acionada apenas com push na branch "develop"
 
 permissions:
   contents: write
@@ -24,35 +24,42 @@ jobs:
           git config --global user.name "André Gomes"
           git config --global user.email "dhegomeez@gmail.com"
 
-      # Passo 3: Criar o Pull Request da branch develop para homolog
+      # Passo 3: Criar Pull Request de develop para homolog
       - name: Create Pull Request to Homolog
+        id: create-pr-homolog
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: homolog  # A branch alvo do PR
-          head: develop  # A branch de origem do PR
-          title: "Pull Request de Develop para Homolog"
-          body: "Esse PR faz merge da branch develop para homolog para revisão e testes."
+          base: homolog  # Branch de destino
+          head: develop  # Branch de origem
+          title: "PR: Merge develop into homolog"
+          body: "Este PR foi criado automaticamente para merge de develop em homolog."
+          draft: false  # Cria o PR como "aberto" (não como rascunho)
 
-      # Passo 4: Validar o código no Pull Request (exemplo usando testes)
-      - name: Run Tests on Pull Request
+      # Passo 4: Executar testes (exemplo com Maven)
+      - name: Run Tests
         run: |
           mvn clean install
           mvn test
 
-      # Passo 5: Criar PR de homolog para main e fazer merge automático
+      # Passo 5: Criar Pull Request de homolog para main (após testes bem-sucedidos)
       - name: Create Pull Request to Main
+        if: success()  # Só executa se os testes passarem
+        id: create-pr-main
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          head: homolog
-          title: "Merge Homolog to Main"
-          body: "Esse PR faz merge da branch homolog para main após aprovação."
+          base: main  # Branch de destino
+          head: homolog  # Branch de origem
+          title: "PR: Merge homolog into main"
+          body: "Este PR foi criado automaticamente para merge de homolog em main."
+          draft: false
 
+      # Passo 6: Fazer merge automático do PR de homolog para main
       - name: Merge Pull Request to Main
+        if: success()  # Só executa se os testes passarem
         uses: peter-evans/merge-pull-request@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
-          merge-method: merge
+          pull-request-number: ${{ steps.create-pr-main.outputs.pull-request-number }}
+          merge-method: merge  # Método de merge (merge, squash, rebase)
