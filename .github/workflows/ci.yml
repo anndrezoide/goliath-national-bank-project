@@ -1,0 +1,65 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop  # A pipeline será acionada apenas com push na branch "develop"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pr-to-homolog:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Passo 2: Configurar o Git
+      - name: Set up Git
+        run: |
+          git config --global user.name "anndrezoide"
+          git config --global user.email "dhegomeez@gmail.com"
+
+      # Passo 3: Criar Pull Request de develop para homolog
+      - name: Create Pull Request to Homolog
+        id: create-pr-homolog
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: homolog  # Branch de destino
+          head: develop  # Branch de origem
+          title: "PR: Merge develop into homolog"
+          body: "Este PR foi criado automaticamente para merge de develop em homolog."
+          draft: false  # Cria o PR como "aberto" (não como rascunho)
+
+  create-pr-to-main:
+    runs-on: ubuntu-latest
+    needs: create-pr-to-homolog  # Só executa após o PR para homolog ser criado
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged && github.event.pull_request.base.ref == 'homolog'
+
+    steps:
+      # Passo 1: Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Passo 2: Configurar o Git
+      - name: Set up Git
+        run: |
+          git config --global user.name "anndrezoide"
+          git config --global user.email "dhegomeez@gmail.com"
+
+      # Passo 3: Criar Pull Request de homolog para main
+      - name: Create Pull Request to Main
+        id: create-pr-main
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main  # Branch de destino
+          head: homolog  # Branch de origem
+          title: "PR: Merge homolog into main"
+          body: "Este PR foi criado automaticamente para merge de homolog em main."
+          draft: false  # Cria o PR como "aberto" (não como rascunho)
