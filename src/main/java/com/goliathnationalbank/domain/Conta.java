@@ -1,9 +1,9 @@
-package com.model;
+package com.goliathnationalbank.domain;
 
 import java.util.Date;
 
-import com.model.enums.StatusConta;
-import com.model.enums.TipoConta;
+import com.goliathnationalbank.enums.StatusConta;
+import com.goliathnationalbank.enums.TipoConta;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,3 +37,4 @@ public class Conta {
 	private Cliente cliente;
 	
 }
+
