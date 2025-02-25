@@ -1,4 +1,4 @@
-package com.model.enums;
+package com.goliathnationalbank.enums;
 
 public enum TipoConta {
 	CORRENTE,
