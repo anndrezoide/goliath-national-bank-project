@@ -1,8 +1,11 @@
 package com.goliathnationalbank.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +24,6 @@ public class ContaController {
 	@PostMapping
 	public ResponseEntity<Conta> criarConta(@RequestBody Conta conta){
 		Conta novaConta = contaService.criarConta(conta);
-		
 		return new ResponseEntity<>(novaConta, HttpStatus.CREATED);
 	}
 	
@@ -37,4 +39,9 @@ public class ContaController {
 		return new ResponseEntity<>(conta, HttpStatus.OK);
 	}
 	
+	@GetMapping
+	public ResponseEntity<List<Conta>> getAllContas(){
+		List<Conta> contas = this.contaService.getAllContas();
+		return new ResponseEntity<>(contas, HttpStatus.OK);
+	}
 }

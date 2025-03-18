@@ -1,9 +1,9 @@
 package com.goliathnationalbank.controller.dtos;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.goliathnationalbank.enums.Genero;
 
-public record ClienteDTO(String primeiroNome, String ultimoNome, Date dataNascimento, String cpf, Genero genero) {
+public record ClienteDTO(String primeiroNome, String ultimoNome, LocalDate dataNascimento, String cpf, Genero genero) {
 
 }

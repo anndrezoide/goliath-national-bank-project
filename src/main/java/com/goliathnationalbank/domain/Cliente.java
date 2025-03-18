@@ -1,15 +1,15 @@
 package com.goliathnationalbank.domain;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.goliathnationalbank.controller.dtos.ClienteDTO;
 import com.goliathnationalbank.enums.Genero;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,8 +19,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "users")
-@Table(name = "users")
+@Entity(name = "clientes")
+@Table(name = "clientes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,10 +34,14 @@ public class Cliente {
 	private String primeiroNome;
 	private String ultimoNome;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	private Date dataNascimento;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private LocalDate dataNascimento;
+	
+	
 	@Column(unique = true)
 	private String cpf;
+	
+	@Enumerated(EnumType.STRING)
 	private Genero genero;
 	
 	public Cliente(ClienteDTO cliente) {
