@@ -44,7 +44,6 @@ public class ClienteService {
 		if(clienteExistente.isPresent()) {
 			Cliente clienteAtualizado = clienteExistente.get();
 			
-			clienteAtualizado.setId(id);
 			clienteAtualizado.setPrimeiroNome(cliente.getPrimeiroNome());
 			clienteAtualizado.setUltimoNome(cliente.getUltimoNome());
 			clienteAtualizado.setGenero(cliente.getGenero());
