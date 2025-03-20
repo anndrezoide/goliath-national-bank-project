@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +28,13 @@ public class ContaController {
 		return new ResponseEntity<>(novaConta, HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/depositar")
-	public ResponseEntity<Conta> depositar(@RequestBody Long contaId, @RequestBody Double valor){
-		Conta conta = contaService.deposito(contaId, valor);
+	@PostMapping("/depositar/{numeroConta}")
+	public ResponseEntity<Conta> depositar(@PathVariable String numeroConta, @RequestBody Double valor){
+		Conta conta = contaService.deposito(numeroConta, valor);
 		return new ResponseEntity<>(conta, HttpStatus.OK);
 	}
 	
+	@PostMapping("/sacar")
 	public ResponseEntity<Conta> sacar(@RequestBody Long contaId, @RequestBody Double valor){
 		Conta conta = contaService.sacar(contaId, valor);
 	

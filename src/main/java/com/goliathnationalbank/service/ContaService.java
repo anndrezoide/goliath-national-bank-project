@@ -41,10 +41,8 @@ public class ContaService {
 		return contaRepository.save(conta);
 	}
 	
-	
-
-	public Conta deposito(Long contaId, Double valor) {
-		Conta conta = contaRepository.findById(contaId)
+	public Conta deposito(String numeroConta, Double valor) {
+		Conta conta = contaRepository.findByNumeroConta(numeroConta)
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
 		conta.setSaldo(conta.getSaldo() + valor);
 		return contaRepository.save(conta);
